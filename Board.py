@@ -102,10 +102,10 @@ class Board:
                             self.gameOver = True
                         hit += 1
                     break
-            print("Hit!")
+            #print("Hit!")
             hit += 1
         else:
             #self.currState[x][y] = -1
             self.currState[x][y] = 'm'
-            print("Miss!")
+            #print("Miss!")
         return hit

@@ -17,7 +17,7 @@ class AttackBot:
         random.seed(time.time())
 
     def attack(self, board):
-        print("Attack!")
+        #print("Attack!")
         if not board.isGameOver() and self.moves != 100:
             if self.next:
                 x,y = self.next.pop()
@@ -29,7 +29,7 @@ class AttackBot:
                         break
             self.attackLog.add((x, y))
             self.moves += 1
-            print(f"Attacking {x},{y} for move {self.moves}")
+            #print(f"Attacking {x},{y} for move {self.moves}")
             success = board.newAttack(x, y)
             if success == 2:
                 #self.sunkLog.add((x, y))
@@ -47,7 +47,7 @@ class AttackBot:
                 if self.chain:
                     x, y = self.chain
                     if self.Forward:
-                        print("Backtracking")
+                        #print("Backtracking")
                         self.direct = (self.direct + 2) % 4
                         self.getAdj(x, y)
                     else:
@@ -60,7 +60,7 @@ class AttackBot:
             return True
         else:
             board.gameOver = True
-            print("Game Over!")
+            #print("Game Over!")
             return False            
 
     def getAdj(self, x, y):

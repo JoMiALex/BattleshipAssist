@@ -45,6 +45,8 @@ def main():
             bot1.attack(playerBoard)
         else:
             print("Game Over!")
+        print(f"Ships Sunk: {playerBoard.sunkShips}")
+        playerBoard.printBoard()
         
         print(f"Attack Log: {i} with {len(bot1.attackLog)}")
         print(bot1.attackLog)
