@@ -1,6 +1,6 @@
 from Board import Board
 from AttackBot import AttackBot
-from Evaluator import Evaluator
+from Dialogue import Dialogue
 import random
 
 testboard = [[0,0,0,0,0,0,0,0,0,0],
@@ -31,44 +31,60 @@ startboard = [[0,0,0,0,0,0,0,0,0,0],
 def main():
     total = 0
     runCount = 10
-    skip = False
+    heatmapActive = False
+    skipTt = False
+
+    dialogue = Dialogue(runCount, heatmapActive, skipTt)
+    print("Dialogue initialized!")
+    
+    #while(True):
+    #    answer = input("Skip turn-by-turn? (y or n): ")
+    #    if answer.lower() == 'y':
+    #        skipTt = True
+    #        break
+    #    elif answer.lower() == 'n':
+    #        skipTt = False
+    #        break
+    #        break
+    #    print("Please enter a valid input.")
+    #print('')
 
     while(True):
-        answer = input("Skip turn-by-turn? (y or n): ")
-        if answer.lower() == 'y':
-            skip = True
-            break
-        elif answer.lower() == 'n':
-            break
-        print("Please enter yes or no.")
+        menu = dialogue.menu()
+        if (menu == 0):
+            return 0
 
-    for i in range(runCount):
-        print(f"Game {i + 1} Begin!")
-        playerBoard = Board()
-        print("Board Initialized")
-        playerBoard.placePiecesRandom()
-        print("Populating Board")
-        bot1 = AttackBot()
-        print("Bot Initialized")
-        playerBoard.printBoard()
-        botEvaluator = Evaluator(playerBoard)
-        print("Eval Initialized")
+        for i in range(runCount):
+            print(f"Game {i + 1} begin!")
+            playerBoard = Board()
+            print("Board initialized!")
+            playerBoard.placePiecesRandom()
+            print("Populating board...")
+            bot1 = AttackBot()
+            print("Bot initialized!")
+            playerBoard.printBoard()
+            turns = 0
 
-        while not playerBoard.isGameOver():
-            bot1.attack(playerBoard)
-            if (not skip):
-                input("Press Enter to continue...")
-                playerBoard.printBoard()
-        else:
-            print("Game Over!")
+            while not playerBoard.isGameOver():
+                turns += 1
+                if (skipTt == True):
+                    input("Press Enter to continue...")
+                    playerBoard.printBoard()
+                bot1.attack(playerBoard, heatmapActive)
+            else:
+                print("Game Over!")
 
-        print(f"Attack Log: {i} with {len(bot1.attackLog)} moves")
-        #print(bot1.attackLog)
-        total += bot1.moves
-    
-    average = total/runCount
-    #print(f"Average Moves: {average} Over {runCount} runs.")
-    return average
+            print(f"Attack Log: {i} with {len(bot1.attackLog)} moves")
+            #print(bot1.attackLog)
+            total += bot1.moves
+            playerBoard.evaluator.printScore(turns)
+        
+        average = total/runCount
+        print(f"Average Moves: {average} Over {runCount} runs.")
+        input("Press Enter to continue...")
+        print('')
+
+    return -1
 
 if __name__ == "__main__":
     final_average = main()

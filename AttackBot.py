@@ -6,7 +6,6 @@ class AttackBot:
     
     def __init__(self):
         self.attackLog = set()
-        #self.sunkLog = set()
         self.reccommended = [[1]*10]*10
         self.direct = 0
         self.chain = []
@@ -16,23 +15,25 @@ class AttackBot:
         self.moves = 0
         random.seed(time.time())
 
-    def attack(self, board):
+    def attack(self, board, heatmapActive):
         #print("Attack!")
         if not board.isGameOver() and self.moves < 100:
             if self.next:
                 x,y = self.next.pop()
             else:
                 while True:
-                    x = random.randint(0, 9)
-                    y = random.randint(0, 9)
-                    if (x,y) not in self.attackLog:
-                        break
+                    if (heatmapActive):
+                        self.heatmapMove(board, board.heatmap)
+                    else:
+                        x = random.randint(0, 9)
+                        y = random.randint(0, 9)
+                        if (x,y) not in self.attackLog:
+                            break
             self.attackLog.add((x, y))
             self.moves += 1
-            print(f"Attacking {x},{y} for move {self.moves}")
+            print(f"Attacking ({x},{y}) for move {self.moves}")
             success = board.newAttack(x, y)
             if success == 2:
-                #self.sunkLog.add((x, y))
                 self.direct = 0
                 self.chain.clear()
                 self.next.clear()
@@ -79,3 +80,14 @@ class AttackBot:
             self.chain.clear()
             self.next.clear()
             self.Forward = False
+
+    def heatmapMove(board, heatmap):
+        maxVal = -1
+        bestMove = None
+        for x in range(10):
+            for y in range(10):
+                if board[x][y] not in ['m', 'A', 'B', 'C', 'S', 'D', 'm']:
+                    if heatmap[x][y] > maxVal:
+                        maxVal = heatmap[x][y]
+                        bestMove = (x, y)
+        return bestMove
