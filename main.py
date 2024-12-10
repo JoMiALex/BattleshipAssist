@@ -24,6 +24,10 @@ runCount = 20
 trend = [[1]*10]*10
 
 def main():
+    for i in range(0, runCount):
+        board = Board()
+        board.placePiecesRandom()
+        board.printBoard()
     print(trend)
 
 main()

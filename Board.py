@@ -4,16 +4,7 @@ from Piece import Piece
 class Board:
 
     def __init__(self):
-        self.currState = [[0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0,0,0]]
+        self.currState = [['O']*10]*10
         self.carrier = Piece(5)
         self.battleship = Piece(4)
         self.cruiser = Piece(3)
@@ -21,7 +12,14 @@ class Board:
         self.destroyer = Piece(2)
         self.ships = [self.carrier, self.battleship, self.cruiser, self.submarine, self.destroyer]
         self.occupied = set()
+        self.sunkShips = 0
+        self.gameOver = False
 
+    def printBoard(self):
+        print(self.currState)
+    
+    def isGameOver(self):
+        return self.gameOver
 
     def placePiecesRandom(self, piece):
         for s in self.ships:
@@ -48,4 +46,24 @@ class Board:
                         else:
                             self.occupied.update(s.setPositions(x, y, orientation))
         for i,j in self.occupied:
-            self.currState[i][j] = 1
+            self.currState[i][j] = '-'
+    
+    def newAttack(self, x, y):
+        if self.currState[x][y] == '-':
+            self.currState[x][y] = 'x'
+            for s in self.ships:
+                if s.checkInPositions((x,y)):
+                    sunk = s.addHit(x,y)
+                    if sunk:
+                        for i,j in s.positions:
+                            self.currState[i][j] = 'X'
+                        sunkShips += 1
+                        if sunkShips == 5:
+                            self.gameOver = True
+                    break
+            print("Hit!")
+            return True
+        else:
+            #self.currState[x][y] = -1
+            print("Miss!")
+            return False

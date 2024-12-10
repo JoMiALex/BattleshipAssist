@@ -23,12 +23,16 @@ class Piece:
 
     # sets a position as destroyed
     def addHit(self, i, j):
-        self.damage.add((i, j))
-        if len(self.damage) == self.shipLength:
-            self.destroyed = True
+        if self.destroyed:
+            print("Ship already destroyed!")
+        else:
+            self.damage.add((i, j))
+            if len(self.damage) == self.shipLength:
+                self.destroyed = True
+                print("Ship destroyed!")
 
 
-    def checkInPositions(self, arr):
-        if set(arr) in self.positions:
+    def checkInPositions(self, pos):
+        if pos in self.positions:
             return True
         return False
