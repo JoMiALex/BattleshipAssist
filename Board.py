@@ -49,21 +49,24 @@ class Board:
             self.currState[i][j] = '-'
     
     def newAttack(self, x, y):
+        hit = 0
+        sLen = 0
         if self.currState[x][y] == '-':
             self.currState[x][y] = 'x'
             for s in self.ships:
                 if s.checkInPositions((x,y)):
-                    sunk = s.addHit(x,y)
+                    sunk, sLen = s.addHit(x,y)
                     if sunk:
                         for i,j in s.positions:
                             self.currState[i][j] = 'X'
                         sunkShips += 1
                         if sunkShips == 5:
                             self.gameOver = True
+                    hit += 1
                     break
             print("Hit!")
-            return True
+            hit += 1
         else:
             #self.currState[x][y] = -1
             print("Miss!")
-            return False
+        return hit, sLen
