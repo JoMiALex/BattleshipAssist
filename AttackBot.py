@@ -86,7 +86,7 @@ class AttackBot:
         bestMove = None
         for x in range(10):
             for y in range(10):
-                if board[x][y] not in ['m', 'A', 'B', 'C', 'S', 'D', 'm']:
+                if board[x][y] not in ['m', 'A', 'B', 'C', 'S', 'D', 'H', 'X']:
                     if heatmap[x][y] > maxVal:
                         maxVal = heatmap[x][y]
                         bestMove = (x, y)
