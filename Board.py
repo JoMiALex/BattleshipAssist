@@ -6,14 +6,15 @@ class Board:
 
     def __init__(self):
         self.currState = [[' ' for _ in range(10)] for _ in range(10)]
-        self.carrier = Piece(5)
-        self.battleship = Piece(4)
-        self.cruiser = Piece(3)
-        self.submarine = Piece(3)
-        self.destroyer = Piece(2)
-        self.ships = [self.carrier, self.battleship, self.cruiser, self.submarine, self.destroyer]
+        #self.carrier = Piece(5)
+        #self.battleship = Piece(4)
+        #self.cruiser = Piece(3)
+        #self.submarine = Piece(3)
+        #self.destroyer = Piece(2)
+        self.ships = [Piece("Aircraft carrier"), Piece("Battleship"), Piece("Cruiser"), Piece("Submarine"), Piece("Destroyer")]
         self.occupied = set()
-        self.sunkShips = 0
+        self.sunkShips = []
+        self.sunkTotal = 0
         self.gameOver = False
         random.seed(time.time())
 
@@ -27,7 +28,7 @@ class Board:
     def manualPlacing(self):
         for s in self.ships:
             while True:
-                print("Enter the starting coordinates for your", s.getLength(), "length ship:")
+                print("Enter the starting coordinates for your " + s.shipType + ", " + s.getLength() + ":")
                 x = int(input("X: "))
                 y = int(input("Y: "))
                 orientation = int(input("Orientation (0 for horizontal, 1 for vertical): "))
@@ -50,7 +51,7 @@ class Board:
                         for i in range(s.getLength()):
                             if (x+i, y) in self.occupied:
                                 print("Ship overlaps with another ship!")
-                                break
+                                continue
                         else:
                             self.occupied.update(s.setPositions(x, y, orientation))
                 self.printBoard()
@@ -61,6 +62,7 @@ class Board:
     def placePiecesRandom(self):
         for s in self.ships:
             while True:
+                ship = s.shipType
                 x = random.randint(0, 9)
                 y = random.randint(0, 9)
                 orientation = random.randint(0, 1)
@@ -69,40 +71,72 @@ class Board:
                         continue
                     else:
                         for i in range(s.getLength()):
+                            print("(" + str(x) + ", " + str(y+i) + ")")
                             if (x, y+i) in self.occupied:
+                                print("Ship overlaps with another ship " + self.currState[x][y+i] + " at (" + str(x) + ", " + str(y+i) + ")!")
                                 break
                         else:
+                            print("It's good, setting ship at (" + str(x) + ", " + str(y) + ") to (" + str(x) + ", " + str(y+i) + ")!")
                             self.occupied.update(s.setPositions(x, y, orientation))
+                            print("Setting " + s.shipType)
+                            for i in range(s.getLength()):
+                                if s.shipType == "Aircraft carrier":
+                                    self.currState[x][y+i] = 'A'
+                                elif s.shipType == "Battleship":
+                                    self.currState[x][y+i] = 'B'
+                                elif s.shipType == "Cruiser":
+                                    self.currState[x][y+i] = 'C'
+                                elif s.shipType == "Submarine":
+                                    self.currState[x][y+i] = 'S'
+                                elif s.shipType == "Destroyer":
+                                    self.currState[x][y+i] = 'D'
+                            break
+
                 else:
                     if x + s.getLength() > 9:
                         continue
+                    for i in range(s.getLength()):
+                        print("(" + str(x+i) + ", " + str(y) + ")")
+                        if (x+i, y) in self.occupied:
+                            print("Ship overlaps with another ship " + self.currState[x+i][y] + " at (" + str(x+i) + ", " + str(y) + ")!")
+                            break
                     else:
+                        print("It's good, setting ship at (" + str(x) + ", " + str(y) + ") to (" + str(x+i) + ", " + str(y) + ")!")
+                        self.occupied.update(s.setPositions(x, y, orientation))
+                        print("Setting " + s.shipType)
                         for i in range(s.getLength()):
-                            if (x+i, y) in self.occupied:
-                                break
-                        else:
-                            self.occupied.update(s.setPositions(x, y, orientation))
-                break
-        for i,j in self.occupied:
-            self.currState[i][j] = 'A'
-    
+                            if s.shipType == "Aircraft carrier":
+                                self.currState[x+i][y] = 'A'
+                            elif s.shipType == "Battleship":
+                                self.currState[x+i][y] = 'B'
+                            elif s.shipType == "Cruiser":
+                                self.currState[x+i][y] = 'C'
+                            elif s.shipType == "Submarine":
+                                self.currState[x+i][y] = 'S'
+                            elif s.shipType == "Destroyer":
+                                self.currState[x+i][y] = 'D'
+                        break     
+                print("Try again!")
+                                         
+        #for i,j in self.occupied:
+        #    self.currState[i][j] = 'A'
+
     def newAttack(self, x, y):
         hit = 0
-        sLen = 0
-        if self.currState[x][y] == 'A':
+        if self.currState[x][y] in ['A', 'B', 'C', 'S', 'D']:
             self.currState[x][y] = 'H'
             for s in self.ships:
                 if s.checkInPositions((x,y)):
-                    sunk, sLen = s.addHit(x,y)
+                    sunk = s.addHit(x,y)
                     if sunk:
+                        self.sunkShips.append(s.shipType)
+                        self.sunkTotal += 1
                         for i,j in s.positions:
                             self.currState[i][j] = 'X'
-                        self.sunkShips += 1
-                        if self.sunkShips == 5:
+                        if self.sunkTotal >= 5:
                             self.gameOver = True
                         hit += 1
                     break
-            print("Hit!")
             hit += 1
         else:
             #self.currState[x][y] = -1

@@ -17,8 +17,8 @@ class AttackBot:
         random.seed(time.time())
 
     def attack(self, board):
-        print("Attack!")
-        if not board.isGameOver() and self.moves != 100:
+        #print("Attack!")
+        if not board.isGameOver() and self.moves < 100:
             if self.next:
                 x,y = self.next.pop()
             else:
@@ -60,7 +60,7 @@ class AttackBot:
             return True
         else:
             board.gameOver = True
-            print("Game Over!")
+            #print("Game Over!")
             return False            
 
     def getAdj(self, x, y):
