@@ -30,7 +30,7 @@ class Piece:
             self.damage.add((i, j))
             if len(self.damage) == self.shipLength:
                 self.destroyed = True
-                print("Ship destroyed!")
+                #print("Ship destroyed!")
             return self.destroyed, self.shipLength
 
 

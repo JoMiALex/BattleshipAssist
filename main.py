@@ -29,27 +29,27 @@ startboard = [[0,0,0,0,0,0,0,0,0,0],
 
 def main():
     total = 0
-    runCount = 10
+    runCount = int(input("How many trials should be run: "))
 
     for i in range(runCount):
         print(f"Game {i} Begin!")
         playerBoard = Board()
         print("Board Initialized")
         playerBoard.placePiecesRandom()
-        print("Populating Board")
+        #print("Populating Board")
         bot1 = AttackBot()
         print("Bot Initialized")
-        playerBoard.printBoard()
+        #playerBoard.printBoard()
 
         while not playerBoard.isGameOver():
             bot1.attack(playerBoard)
         else:
             print("Game Over!")
-        print(f"Ships Sunk: {playerBoard.sunkShips}")
-        playerBoard.printBoard()
+        #print(f"Ships Sunk: {playerBoard.sunkShips}")
+        #playerBoard.printBoard()
         
-        print(f"Attack Log: {i} with {len(bot1.attackLog)}")
-        print(bot1.attackLog)
+        #print(f"Attack Log: {i} with {len(bot1.attackLog)}")
+        #print(bot1.attackLog)
         total += bot1.moves
     
     average = total/runCount
