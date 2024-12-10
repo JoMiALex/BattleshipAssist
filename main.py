@@ -21,7 +21,9 @@ startboard = [[0,0,0,0,0,0,0,0,0,0],
            [0,0,0,0,0,0,0,0,0,0],
            [0,0,0,0,0,0,0,0,0,0]]
 runCount = 20
+#to be used for tracking patterns freq/total runs
 trend = [[1]*10]*10
+frequencies = [[0]*10]*10
 
 def main():
     for i in range(0, runCount):
