@@ -6,4 +6,4 @@ class HeatMap:
     def updateHeatmap(self, occupied):
         for x,y in occupied:
             self.heatmap[x][y] += 1
-        
+        print("Heatmapping!")

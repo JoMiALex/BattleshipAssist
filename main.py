@@ -81,6 +81,8 @@ def main():
         
         average = total/runCount
         print(f"Average Moves: {average} Over {runCount} runs.")
+        average = 0
+        total = 0
         input("Press Enter to continue...")
         print('')
 
