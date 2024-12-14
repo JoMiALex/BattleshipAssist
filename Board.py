@@ -31,7 +31,7 @@ class Board:
     def manualPlacing(self):
         for s in self.ships:
             while True:
-                print("Enter the starting coordinates for your " + s.shipType + ", " + s.getLength() + ":")
+                print("Enter the starting coordinates for your " + s.shipType + ", " + str(s.getLength()) + ":")
                 x = int(input("X: "))
                 y = int(input("Y: "))
                 orientation = int(input("Orientation (0 for horizontal, 1 for vertical): "))
