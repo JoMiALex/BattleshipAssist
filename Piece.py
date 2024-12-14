@@ -36,7 +36,7 @@ class Piece:
         print("Hit!")
         if self.destroyed:
             print(self.shipType + " already destroyed!")
-            return False
+            return True
         else:
             self.damage.add((i, j))
             if len(self.damage) == self.getLength():

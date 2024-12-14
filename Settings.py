@@ -60,7 +60,7 @@ class Settings:
                 print('')
                 while(True):
                     answer = input("RunCount(r): " + str(self.runCount) + "    Heatmap(h): " + str(self.heatmapActive) + 
-                                   "    Turn-by-Turn(t): " + str(self.skipTt) + "    Back(q): ")
+                                   "    Skip through turns(t): " + str(self.skipTt) + "    Back(q): ")
                     if answer.lower() == 'r':
                         while True:
                             try:

@@ -27,8 +27,9 @@ class AttackBot:
                         if (x, y) not in self.attackLog:
                             break
                     else:
+                        random.seed(time.time())
                         x = random.randint(0, 9)
-                        y = random.randint(0, 9)
+                        y = random.randint(0, 9)# * 2 if x % 2 == 0 else random.randint(0, 4) * 2 + 1
                         if (x, y) not in self.attackLog:
                             break
             self.attackLog.add((x,y))
