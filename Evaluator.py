@@ -8,7 +8,7 @@ class Evaluator:
         #self.destroyerVal = 4
         self.total = 0
 
-    def addScore(self, s, order):
+    def addScore(self, sunk):
         #if (s == "Aircraft carrier"):
         #   self.total += self.carrierVal/order
         #elif (s == "Battleship"):
@@ -19,7 +19,7 @@ class Evaluator:
         #   self.total += self.submarineVal/order
         #elif (s == "Destroyer"):
         #   self.total += self.destroyerVal/order
-        self.total = order/5
+        self.total = sunk/5
 
     def printScore(self, turns):
         print("The Admiral evaluator gives you a score of " + str(round(self.total*(100-turns), 2)) + ".")

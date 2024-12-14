@@ -15,7 +15,7 @@ class AttackBot:
         self.moves = 0
         random.seed(time.time())
 
-    def attack(self, board, heatmapActive):
+    def attack(self, board, heatmap, heatmapActive):
         #print("Attack!")
         if not board.isGameOver() and self.moves < 100:
             if self.next:
@@ -23,13 +23,15 @@ class AttackBot:
             else:
                 while True:
                     if (heatmapActive):
-                        self.heatmapMove(board, board.heatmap)
+                        x,y = self.heatmapMove(heatmap)
+                        if (x, y) not in self.attackLog:
+                            break
                     else:
                         x = random.randint(0, 9)
                         y = random.randint(0, 9)
-                        if (x,y) not in self.attackLog:
+                        if (x, y) not in self.attackLog:
                             break
-            self.attackLog.add((x, y))
+            self.attackLog.add((x,y))
             self.moves += 1
             print(f"Attacking ({x},{y}) for move {self.moves}")
             success = board.newAttack(x, y)
@@ -81,13 +83,27 @@ class AttackBot:
             self.next.clear()
             self.Forward = False
 
-    def heatmapMove(board, heatmap):
+    def heatmapMove(self, heatmap):
         maxVal = -1
-        bestMove = None
+        bestMoves = []
         for x in range(10):
             for y in range(10):
-                if board[x][y] not in ['m', 'A', 'B', 'C', 'S', 'D', 'H', 'X']:
-                    if heatmap[x][y] > maxVal:
-                        maxVal = heatmap[x][y]
-                        bestMove = (x, y)
+                if (x, y) not in self.attackLog:
+                    if heatmap.heatmap[x][y] > maxVal:
+                        maxVal = heatmap.heatmap[x][y]
+                        bestMoves.clear()
+                        bestMoves.append((x, y))
+                    elif heatmap.heatmap[x][y] == maxVal:
+                        bestMoves.append((x, y))
+        #print(bestMoves)
+        while (True):
+            if len(bestMoves) <= 0:
+                bestMove = (random.randint(0, 9), random.randint(0, 9))
+                if bestMove not in self.attackLog:
+                    break
+            else:
+                bestMove = random.choice(bestMoves)
+                if bestMove not in self.attackLog:
+                    break
+        #print("The best move should be " + str(bestMove))
         return bestMove
